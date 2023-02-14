@@ -4,11 +4,11 @@ from django import forms
 # Create your models here.
 
 class UserDetails(models.Model):
-    name = models.CharField(max_length=75)
-    birthDate = models.DateField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    firstName = models.CharField(max_length=75)
+    lastName = models.CharField(max_length=75)
+    password = models.CharField(max_length=75)
     email = models.EmailField()
 
     def __str__(self):
-        return self.name
+        return self.firstName
 
