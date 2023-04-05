@@ -1,0 +1,17 @@
+.vertical {
+    border-left: 6px solid white;
+    height: 750px;
+    position:absolute;
+    left: 50%;
+}
+
+.jobLeft {
+    height: 200px;
+    position:relative;
+    margin-left: 20px;
+}
+
+.jobRight {
+    height: 200px;
+    position:relative;
+}

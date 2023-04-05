@@ -44,6 +44,7 @@ export default function SignIn() {
     }, [])
 
     const fetchData = () => {
+
         API.get('/')
             .then((res) => {
                 setUserData(res.data)

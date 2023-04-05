@@ -68,6 +68,10 @@ function Home() {
                         Welcome User
                     </Typography>
                     <Button color="inherit" onClick={() => { navigate('/') }}>Logout</Button>
+                    <Button color="inherit" onClick={() => { navigate('/portfolio') }}>Portfolio</Button>
+                    <Button color="inherit" onClick={() => { navigate('/ParticlePortfolio') }}>Particle Portfolio</Button>
+                    <Button color="inherit" onClick={() => { navigate('/map') }}>Map View</Button>
+                    <Button color="inherit" onClick={() => { navigate('/dogAdoption') }}>Dog Adoption Website</Button>
                 </Toolbar>
             </AppBar>
 

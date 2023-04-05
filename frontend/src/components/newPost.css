@@ -1,0 +1,19 @@
+@media screen and (min-width: 768px) {
+    .container {
+      max-width: 768px;
+      margin: 0 auto;
+    }
+  }
+
+  .radio-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media screen and (min-width: 768px) {
+    .radio-buttons-container {
+      flex-direction: row;
+      gap: 20px;
+    }
+  }
