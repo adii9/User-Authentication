@@ -139,7 +139,7 @@ function NewPost() {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        {/* <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Name of your pet</Form.Label>
                             <Form.Control type="text" required value={petName} placeholder="Enter Name of your pet" onChange={(e) => setPetName(e.target.value)} />
                         </Form.Group>
@@ -149,7 +149,7 @@ function NewPost() {
                             <Form.Text className="text-muted">
                                 This helps the Adopter know your dog better
                             </Form.Text>
-                        </Form.Group> */}
+                        </Form.Group>
 
                         {/* <div className='radio-buttons-container'>
                             <FormControl className="mb-3" controlId="formBasicCheckbox" required>
