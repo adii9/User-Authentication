@@ -27,6 +27,14 @@ class DogAdoption(models.Model):
     reason = models.CharField(max_length=500)
     additionalInformation = models.CharField(max_length=500)
 
+    currentOwnerName = models.CharField(max_length=50)
+    contactNumber = models.CharField(max_length=10)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pinCode = models.CharField(max_length=6)
+
+
+
     def __str__(self):
         return self.petType
 

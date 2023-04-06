@@ -41,22 +41,14 @@ function NewPost() {
     const dropDownItems = ['Cat', 'Dog']
     const genderDropDown = ['male', 'female']
     const [show, setShow] = useState(false)
+    const [currentOwnerName, setCurrentOwnerName] = useState('')
+    const [contactNumber, setContactNumber] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [pinCode, setPinCode] = useState('')
 
-    const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation) => {
-        // console.log(petType, petName, breed, gender,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation)
-        console.log("petType -> ", petType)
-        console.log("Gender -> ", gender)
-        console.log("petName -> ", petName)
-        console.log("breed -> ", breed)
-        console.log("vaccinationStatus -> ", vaccinationStatus)
-        console.log("neutered -> ", neutered)
-        console.log("shotsUptoDate -> ", shotsUptoDate)
-        console.log("goodWithCats -> ", goodWithCats)
-        console.log("goodWithDogs -> ", goodWithDogs)
-        console.log("goodWithKids -> ", goodWithKids)
-        console.log("reason -> ", reason)
-        console.log("additionalInformation -> ", additionalInformation)
-        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation}
+    const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode) => {
+        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode}
         try {
             DogAdoptionAPI.post('/', items)
             .then(() => {
@@ -72,6 +64,11 @@ function NewPost() {
                 setGoodWithKids('')
                 setReason('')
                 setAdditionalInformation('')
+                setCurrentOwnerName('')
+                setContactNumber('')
+                setCity('')
+                setState('')
+                setPinCode('')
                 setShow(true)
 
             })
@@ -83,18 +80,18 @@ function NewPost() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation)
+        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode)
     }
 
 
     return (
         <>
-            <div style={{ display: 'flex', flexDirection: 'column', height: '140vh', backgroundColor: '#edf6f9' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '200vh', backgroundColor: '#edf6f9' }}>
 
                 <div className='container'>
                     <Form onSubmit={handleSubmit}>
                         <h1>
-                            Let's start with some basic details
+                            Let's start with some basic details of your pet
                         </h1>
 
                         {show ? <Alert severity="success">This is a success alert — check it out!</Alert> : null}
@@ -234,6 +231,31 @@ function NewPost() {
                                 <Form.Control as="textarea" rows={3} required value={additionalInformation} onChange={(e) => setAdditionalInformation(e.target.value)} placeholder="Please mention more information" />
                                 <Form.Text className="text-muted">
                                     No one likes change
+                                </Form.Text>
+                            </Form.Group>
+
+                            <h1>Let's get some basic details of you!</h1>
+
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Current Owner Name</Form.Label>
+                                <Form.Control required value={currentOwnerName} type='text' onChange={(e) => setCurrentOwnerName(e.target.value)} placeholder="What's Your Name" />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Contact Number</Form.Label>
+                                <Form.Control required value={contactNumber} type='text' pattern="[0-9]*" onChange={(e) => setContactNumber(e.target.value)} placeholder="What's your Phone number" />
+                                <Form.Text className="text-muted">
+                                    Don't you worry this information will only be available to verified users
+                                </Form.Text>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control required value={state} type='text' onChange={(e) => setState(e.target.value)} placeholder="State" />
+                                <Form.Control style={{marginTop: 5}} required value={city} type='text' onChange={(e) => setCity(e.target.value)} placeholder="City" />
+                                <Form.Control style={{marginTop: 5}} required value={pinCode} type='text' onChange={(e) => setPinCode(e.target.value)} placeholder="Pin Code" />
+                                <Form.Text className="text-muted">
+                                    Don't you worry this information will only be available to verified users. This information will be helpful for the new owner to locate you.
                                 </Form.Text>
                             </Form.Group>
 
