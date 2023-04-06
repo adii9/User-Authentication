@@ -54,27 +54,6 @@ function Home() {
 
     return (
         <>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Welcome User
-                    </Typography>
-                    <Button color="inherit" onClick={() => { navigate('/') }}>Logout</Button>
-                    <Button color="inherit" onClick={() => { navigate('/portfolio') }}>Portfolio</Button>
-                    <Button color="inherit" onClick={() => { navigate('/ParticlePortfolio') }}>Particle Portfolio</Button>
-                    <Button color="inherit" onClick={() => { navigate('/map') }}>Map View</Button>
-                    <Button color="inherit" onClick={() => { navigate('/dogAdoption') }}>Dog Adoption Website</Button>
-                </Toolbar>
-            </AppBar>
-
             <h2>List Of Users</h2>
 
             {userData.flatMap((data, key) => (

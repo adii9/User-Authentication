@@ -28,7 +28,7 @@ function NewPost() {
     const [petType, setPetType] = useState('')
     const [petName, setPetName] = useState('')
     const [breed, setBreed] = useState('')
-    const [gender, setGender] = useState('')
+    const [gender, setGender] = useState("")
     const [neutered, setNeutered] = useState('')
     const [vaccinationStatus, setVaccinationStatus] = useState('')
     const [shotsUptoDate, setShotsUptoDate] = useState('')
@@ -45,74 +45,60 @@ function NewPost() {
     const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation) => {
         // console.log(petType, petName, breed, gender,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation)
         console.log("petType -> ", petType)
-        console.log("gender -> ", gender)
-        // console.log("petName -> ", petName)
-        // console.log("breed -> ", breed)
-        // console.log("vaccinationStatus -> ", vaccinationStatus)
-        // console.log("neutered -> ", neutered)
-        // console.log("shotsUptoDate -> ", shotsUptoDate)
-        // console.log("goodWithCats -> ", goodWithCats)
-        // console.log("goodWithDogs -> ", goodWithDogs)
-        // console.log("goodWithKids -> ", goodWithKids)
-        // console.log("reason -> ", reason)
-        // console.log("additionalInformation -> ", additionalInformation)
-        // let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation}
-        // try {
-        //     DogAdoptionAPI.post('/', items)
-        //     .then(() => {
-        //         setPetType('')
-        //         setPetName('')
-        //         setBreed("")
-        //         setGender('')
-        //         setNeutered("")
-        //         setVaccinationStatus('')
-        //         setShotsUptoDate('')
-        //         setGoodWithCats('')
-        //         setGoodWithDogs('')
-        //         setGoodWithKids('')
-        //         setReason('')
-        //         setAdditionalInformation('')
-        //         setShow(true)
-        //     })
-        // }
-        // catch(e) {
-        //     alert(e)
-        // }
+        console.log("Gender -> ", gender)
+        console.log("petName -> ", petName)
+        console.log("breed -> ", breed)
+        console.log("vaccinationStatus -> ", vaccinationStatus)
+        console.log("neutered -> ", neutered)
+        console.log("shotsUptoDate -> ", shotsUptoDate)
+        console.log("goodWithCats -> ", goodWithCats)
+        console.log("goodWithDogs -> ", goodWithDogs)
+        console.log("goodWithKids -> ", goodWithKids)
+        console.log("reason -> ", reason)
+        console.log("additionalInformation -> ", additionalInformation)
+        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation}
+        try {
+            DogAdoptionAPI.post('/', items)
+            .then(() => {
+                setPetType('')
+                setPetName('')
+                setBreed("")
+                setGender('')
+                setNeutered("")
+                setVaccinationStatus('')
+                setShotsUptoDate('')
+                setGoodWithCats('')
+                setGoodWithDogs('')
+                setGoodWithKids('')
+                setReason('')
+                setAdditionalInformation('')
+                setShow(true)
+
+            })
+        }
+        catch(e) {
+            alert(e)
+        }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        pushData(petType, petName, breed, neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation)
+        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation)
     }
 
 
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', height: '140vh', backgroundColor: '#edf6f9' }}>
-                <AppBar position="static" sx={{ backgroundColor: '#006d77' }}>
-                    <Toolbar>
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                            onClick={() => { navigate('/') }}
-                        ></IconButton>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            PawsitiveAdoption
-                        </Typography>
-                        <Button color="inherit" onClick={() => { navigate('/') }}>About Us</Button>
-                        <Button color="inherit" onClick={() => { navigate('/portfolio') }}>Contact</Button>
-                    </Toolbar>
-                </AppBar>
 
                 <div className='container'>
                     <Form onSubmit={handleSubmit}>
                         <h1>
                             Let's start with some basic details
                         </h1>
+
                         {show ? <Alert severity="success">This is a success alert — check it out!</Alert> : null}
+
                         <Dropdown>
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                 {!petType ? "Identify Your Pet" : petType}
@@ -131,11 +117,9 @@ function NewPost() {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                {/* {genderDropDown.map((item) => (
+                                {genderDropDown.map((item) => (
                                     <Dropdown.Item onClick={() => setGender(item)}>{item}</Dropdown.Item>
-                                ))} */}
-                                <Dropdown.Item>Male</Dropdown.Item>
-                                <Dropdown.Item>Female</Dropdown.Item>
+                                ))}
                             </Dropdown.Menu>
                         </Dropdown>
 
@@ -144,14 +128,14 @@ function NewPost() {
                             <Form.Control type="text" required value={petName} placeholder="Enter Name of your pet" onChange={(e) => setPetName(e.target.value)} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Breed of the Dog</Form.Label>
+                            <Form.Label>Breed</Form.Label>
                             <Form.Control type="text" placeholder="Enter Breed. Eg: Golden Retriever" required value={breed} onChange={(e) => setBreed(e.target.value)} />
                             <Form.Text className="text-muted">
                                 This helps the Adopter know your dog better
                             </Form.Text>
                         </Form.Group>
 
-                        {/* <div className='radio-buttons-container'>
+                        <div className='radio-buttons-container'>
                             <FormControl className="mb-3" controlId="formBasicCheckbox" required>
                                 <FormLabel id="demo-radio-buttons-group-label">Vaccination Status</FormLabel>
                                 <RadioGroup
@@ -235,9 +219,9 @@ function NewPost() {
                                     <FormControlLabel value="false" control={<Radio />} label="No" />
                                 </RadioGroup>
                             </FormControl>
-                        </div> */}
+                        </div>
                         <div className='py-md-3'>
-                            {/* <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Reason for giving away your pet</Form.Label>
                                 <Form.Control as="textarea" rows={3} required value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Please explain the reason for giving away your pet" />
                                 <Form.Text className="text-muted">
@@ -251,7 +235,7 @@ function NewPost() {
                                 <Form.Text className="text-muted">
                                     No one likes change
                                 </Form.Text>
-                            </Form.Group> */}
+                            </Form.Group>
 
                             <Button variant="primary" type="submit" style={{ margin: '20px' }}>
                                 Submit
