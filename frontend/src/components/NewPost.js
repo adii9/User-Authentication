@@ -47,8 +47,8 @@ function NewPost() {
     const [state, setState] = useState('')
     const [pinCode, setPinCode] = useState('')
 
-    const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode) => {
-        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode}
+    const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state) => {
+        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state}
         try {
             DogAdoptionAPI.post('/', items)
             .then(() => {
@@ -80,7 +80,7 @@ function NewPost() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state, pinCode)
+        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state)
     }
 
 

@@ -31,7 +31,6 @@ class DogAdoption(models.Model):
     contactNumber = models.CharField(max_length=10)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    pinCode = models.CharField(max_length=6)
 
 
 
