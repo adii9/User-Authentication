@@ -21,6 +21,8 @@ import { useEffect, useState } from 'react'
 import DogAdoptionAPI from '../DogAdoptionAPI';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import axios from "axios";
+import Spinner from 'react-bootstrap/Spinner';
 
 
 function NewPost() {
@@ -45,43 +47,110 @@ function NewPost() {
     const [contactNumber, setContactNumber] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
-    const [pinCode, setPinCode] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("");
+    const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState("");
 
-    const pushData = (petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state) => {
-        let items = {petType, petName, breed,gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state}
-        try {
-            DogAdoptionAPI.post('/', items)
-            .then(() => {
-                setPetType('')
-                setPetName('')
-                setBreed("")
-                setGender('')
-                setNeutered("")
-                setVaccinationStatus('')
-                setShotsUptoDate('')
-                setGoodWithCats('')
-                setGoodWithDogs('')
-                setGoodWithKids('')
-                setReason('')
-                setAdditionalInformation('')
-                setCurrentOwnerName('')
-                setContactNumber('')
-                setCity('')
-                setState('')
-                setPinCode('')
-                setShow(true)
+    const ApiJson = {
+        "country": "India"
+    }
 
+    const CityJson =
+    {
+        "country": "India",
+        "state": "Bihar"
+    }
+
+    const handleStateSelect = (state) => {
+        setSelectedState(state);
+        setLoading(true);
+        CityJson.state = state
+        console.log(CityJson);
+        // fetch cities based on selected state
+        axios
+            .post('https://countriesnow.space/api/v0.1/countries/state/cities', CityJson)
+            .then((response) => {
+                console.log("Cities Data -> ", response.data.data)
+                setCities(response.data.data)
+                setLoading(false)
             })
+            .catch((error) => {
+                console.log(error)
+            })
+    };
+
+    const handleCitySelect = (city) => {
+        setSelectedCity(city);
+    };
+
+    const pushData = (petType, gender, petName, breed, vaccinationStatus, neutered, shotsUptoDate, goodWithKids, goodWithDogs, goodWithCats, reason, additionalInformation, currentOwnerName, contactNumber, selectedState, selectedCity) => {
+        // const items = {petType, petName, breed, vaccinationStatus, gender, neutered, shotsUptoDate, goodWithKids, goodWithDogs, goodWithCats, reason, additionalInformation, currentOwnerName, contactNumber, selectedCity, selectedState};
+        const items = {
+            petType: petType,
+            gender: gender,
+            petName: petName,
+            breed: breed,
+            vaccinationStatus: vaccinationStatus,
+            neutered: neutered,
+            shotsUptoDate: shotsUptoDate,
+            goodWithKids: goodWithKids,
+            goodWithDogs: goodWithDogs,
+            goodWithCats: goodWithCats,
+            reason: reason,
+            additionalInformation: additionalInformation,
+            currentOwnerName: currentOwnerName,
+            contactNumber: contactNumber,
+            state: selectedState,
+            city: selectedCity
+        };
+
+        try {
+            console.log("Data -> ", (items))
+            DogAdoptionAPI.post('/', items)
+                .then(() => {
+                    setPetType('')
+                    setPetName('')
+                    setBreed("")
+                    setGender('')
+                    setNeutered("")
+                    setVaccinationStatus('')
+                    setShotsUptoDate('')
+                    setGoodWithCats('')
+                    setGoodWithDogs('')
+                    setGoodWithKids('')
+                    setReason('')
+                    setAdditionalInformation('')
+                    setCurrentOwnerName('')
+                    setContactNumber('')
+                    setCity('')
+                    setState('')
+                    setShow(true)
+                })
         }
-        catch(e) {
-            alert(e)
+        catch (e) {
+            console.log("The error is -> ", e)
         }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        pushData(petType, petName, breed, gender ,neutered, vaccinationStatus, shotsUptoDate, goodWithCats, goodWithDogs, goodWithKids, reason, additionalInformation, currentOwnerName, contactNumber, city, state)
+        pushData(petType, gender, petName, breed, vaccinationStatus, neutered, shotsUptoDate, goodWithKids, goodWithDogs, goodWithCats, reason, additionalInformation, currentOwnerName, contactNumber, selectedState, selectedCity)
     }
+
+    useEffect(() => {
+        setLoading(true);
+        axios
+            .post("https://countriesnow.space/api/v0.1/countries/states", ApiJson)
+            .then((response) => {
+                setStates(response.data.data.states);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
 
     return (
@@ -108,7 +177,7 @@ function NewPost() {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <Dropdown style={{marginTop: 10, marginBottom: 10}}>
+                        <Dropdown style={{ marginTop: 10, marginBottom: 10 }}>
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
                                 {!gender ? "Gender of the Pet" : gender}
                             </Dropdown.Toggle>
@@ -249,11 +318,54 @@ function NewPost() {
                                 </Form.Text>
                             </Form.Group>
 
+
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control required value={state} type='text' onChange={(e) => setState(e.target.value)} placeholder="State" />
-                                <Form.Control style={{marginTop: 5}} required value={city} type='text' onChange={(e) => setCity(e.target.value)} placeholder="City" />
-                                <Form.Control style={{marginTop: 5}} required value={pinCode} type='text' onChange={(e) => setPinCode(e.target.value)} placeholder="Pin Code" />
+                                <Form.Label style={{ marginTop: 5 }}>Search By State</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        {!selectedState ? "State" : selectedState}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "auto" }}>
+                                        {loading ? (
+                                            <Spinner animation="border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </Spinner>
+                                        ) : (
+                                            states.map((state) => (
+                                                <Dropdown.Item key={state.name} onClick={() => handleStateSelect(state.name)}>
+                                                    {state.name}
+                                                </Dropdown.Item>
+                                            ))
+                                        )}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+
+                                {selectedState && (
+                                    <div>
+                                        <Form.Label style={{ marginTop: 5 }}>Search By City</Form.Label>
+                                        <Dropdown>
+                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                                {!selectedCity ? "City" : selectedCity}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "auto" }}>
+                                                {loading ? (
+                                                    <Spinner animation="border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </Spinner>
+                                                ) : (
+                                                    cities.map((city) => (
+                                                        <Dropdown.Item key={city} onClick={() => handleCitySelect(city)}>
+                                                            {city}
+                                                        </Dropdown.Item>
+                                                    ))
+                                                )}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
+                                )}
+
+
                                 <Form.Text className="text-muted">
                                     Don't you worry this information will only be available to verified users. This information will be helpful for the new owner to locate you.
                                 </Form.Text>

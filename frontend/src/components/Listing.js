@@ -2,44 +2,99 @@ import { useEffect, useState } from "react"
 import DogAdoptionAPI from "../DogAdoptionAPI"
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-
+import Spinner from 'react-bootstrap/Spinner';
+import axios from "axios";
+import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 function Listing() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const[option1, setOption1] = useState('Option 1');
-    const [option2, setOption2] = useState('Option 2');
-    const [option3, setOption3] = useState('Option 3');
 
-    const handleOption1Change = (event) => {
-        setOption1(event.target.value);
-    };
 
-    const handleOption2Change = (event) => {
-        setOption2(event.target.value);
-    };
+    const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("");
+    const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState("");
+    const dropDownItems = ['Cat', 'Dog']
+    const [petType, setPetType] = useState('')
 
-    const handleOption3Change = (event) => {
-        setOption3(event.target.value);
-    };
+    const ApiJson = {
+        "country": "India"
+    }
+
+    const CityJson =
+    {
+        "country": "India",
+        "state": "Bihar"
+    }
 
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        setLoading(true);
+        axios
+            .post("https://countriesnow.space/api/v0.1/countries/states", ApiJson)
+            .then((response) => {
+                setStates(response.data.data.states);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
-    const fetchData = () => {
-        DogAdoptionAPI.get('/')
+
+    // useEffect(() => {
+    //     fetchData()
+    // }, [])
+
+    const handleStateSelect = (state) => {
+        setSelectedState(state);
+        setLoading(true);
+        CityJson.state = state
+        console.log(CityJson);
+        // fetch cities based on selected state
+        axios
+            .post('https://countriesnow.space/api/v0.1/countries/state/cities', CityJson)
+            .then((response) => {
+                console.log("Cities Data -> ", response.data.data)
+                setCities(response.data.data)
+                setLoading(false)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    };
+
+    // const fetchData = () => {
+    //     DogAdoptionAPI.get('/')
+    //         .then((res) => {
+    //             setLoading(true)
+    //             setData(res)
+    //         })
+    //         .catch(console.error)
+    //         .finally(() => setLoading(false))
+    // }
+
+
+    const handleCitySelect = (city) => {
+        setSelectedCity(city);
+    };
+
+    const handleSubmit = (petType, state, city) => {
+        DogAdoptionAPI.get('/?petType=${petType}')
             .then((res) => {
                 setLoading(true)
                 setData(res)
             })
-            .catch(console.error)
-            .finally(() => setLoading(false))
+            .catch(console.log)
+            .finally(() =>
+
+            console.log("The Data being fetched using filters -> ", data)
+            )
     }
 
-    console.log("Data -> ", data)
 
     return (
         <>
@@ -48,7 +103,68 @@ function Listing() {
                 <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <div style={{ border: '1px solid black', padding: '20px' }}>
+                            <Button variant="danger">Clear All Filters</Button>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Label style={{marginTop: 5}}>Pet Type</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        {!petType ? "Identify Your Pet" : petType}
+                                    </Dropdown.Toggle>
 
+                                    <Dropdown.Menu>
+                                        {dropDownItems.map((item) => (
+                                            <Dropdown.Item onClick={() => setPetType(item)}>{item}</Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+
+                                <Form.Label style={{ marginTop: 5 }}>Search By State</Form.Label>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        {!selectedState ? "State" : selectedState}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "auto" }}>
+                                        {loading ? (
+                                            <Spinner animation="border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </Spinner>
+                                        ) : (
+                                            states.map((state) => (
+                                                <Dropdown.Item key={state.name} onClick={() => handleStateSelect(state.name)}>
+                                                    {state.name}
+                                                </Dropdown.Item>
+                                            ))
+                                        )}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+
+                                {selectedState && (
+                                    <div>
+                                        <Form.Label style={{ marginTop: 5 }}>Search By City</Form.Label>
+                                        <Dropdown>
+                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                                {!selectedCity ? "City" : selectedCity}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "auto" }}>
+                                                {loading ? (
+                                                    <Spinner animation="border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </Spinner>
+                                                ) : (
+                                                    cities.map((city) => (
+                                                        <Dropdown.Item key={city} onClick={() => handleCitySelect(city)}>
+                                                            {city}
+                                                        </Dropdown.Item>
+                                                    ))
+                                                )}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
+                                )}
+                                <Button variant="primary" type="submit" style={{ margin: '20px' }}>
+                                    Apply Filters
+                                </Button>
+                            </Form>
                         </div>
                     </div>
                     <div style={{ flex: 3, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

@@ -34,6 +34,7 @@ class DogAdoption(models.Model):
 
 
 
+
     def __str__(self):
         return self.petType
 
